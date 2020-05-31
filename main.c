@@ -6,7 +6,7 @@
 #include "sorting.h"
 
 #define ATTEMPTS 10
-#define MAX_TIME 0.001
+#define MAX_TIME 0.002
 #define PUNITION 1000000
 
 
@@ -141,27 +141,6 @@ int main(int argc, char** argv){
 			list = build_random_array(count);
 			while(check_if_sorted(list, count)) list = build_random_array(count);
 			start_t = clock();
-			CocktailShakerSort(list, count);
-			end_t = clock();
-			if(!check_if_sorted(list, count)) total_t += PUNITION;
-			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
-			free(list);
-		}
-		//printf("%d, %lf, CocktailShakerSort\n", count, total_t);
-		if(total_t > MAX_TIME) break;
-		count = augment_count(total_t, count);
-	}
-	printf("%d, %lf, CocktailShakerSort\n", count, total_t);
-
-
-	count = 2;
-	total_t = 0;
-	while(total_t < MAX_TIME){
-		total_t = 0;
-		for(int i = 0; i < ATTEMPTS; i++){
-			list = build_random_array(count);
-			while(check_if_sorted(list, count)) list = build_random_array(count);
-			start_t = clock();
 			PancakeSort(list, count);
 			end_t = clock();
 			if(!check_if_sorted(list, count)) total_t += PUNITION;
@@ -173,6 +152,27 @@ int main(int argc, char** argv){
 		count = augment_count(total_t, count);
 	}
 	printf("%d, %lf, PancakeSort\n", count, total_t);
+
+
+	count = 2;
+	total_t = 0;
+	while(total_t < MAX_TIME){
+		total_t = 0;
+		for(int i = 0; i < ATTEMPTS; i++){
+			list = build_random_array(count);
+			while(check_if_sorted(list, count)) list = build_random_array(count);
+			start_t = clock();
+			CocktailShakerSort(list, count);
+			end_t = clock();
+			if(!check_if_sorted(list, count)) total_t += PUNITION;
+			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
+			free(list);
+		}
+		//printf("%d, %lf, CocktailShakerSort\n", count, total_t);
+		if(total_t > MAX_TIME) break;
+		count = augment_count(total_t, count);
+	}
+	printf("%d, %lf, CocktailShakerSort\n", count, total_t);
 
 
 	count = 2;

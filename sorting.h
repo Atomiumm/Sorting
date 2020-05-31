@@ -1,4 +1,4 @@
-#define MAX_TIME 0.001
+#define MAX_TIME 0.002
 
 int* build_random_array(size_t n){
 	int *list = malloc(sizeof(int) * n);
@@ -27,6 +27,12 @@ void print_list(int *list, size_t n){
 	printf("\n");
 }
 
+void swap(int* ptr1, int* ptr2){
+	int t = *ptr1;
+	*ptr1 = *ptr2;
+	*ptr2 = t;
+}
+
 
 
 
@@ -51,9 +57,7 @@ void BogoSort(int *list, size_t n){ /*O(n*n!)*/
 		count++;
 		for(size_t i = 0; i < n - 1; i++){
 			size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-			int t = list[j];
-			list[j] = list[i];
-			list[i] = t;
+			swap(list+j, list+i);
 		}
 		if((double)(clock() - start_t) / CLOCKS_PER_SEC > MAX_TIME) return;
 	}
@@ -97,30 +101,9 @@ void SelectionSort(int *list, size_t n){ /*O(n^2)*/
 			min = i;
 		}
 	}
-	int t = list[0];
-	list[0] = list[min];
-	list[min] = t;
+	swap(list, list+min);
 	if(n>0){
 		SelectionSort(list+1, n-1);
-	}
-}
-
-void CocktailShakerSort(int *list, size_t n){ /*O(n^2)*/
-	for(int i = 0; i < n/2; i++){
-		for(int j = i; j < n-i-2; j++){
-			if(list[j] > list[j+1]){
-				int t = list[j];
-				list[j] = list[j+1];
-				list[j+1] = t;
-			}
-		}
-		for(int j = n-i-1; j > i; j--){
-			if(list[j] < list[j-1]){
-				int t = list[j];
-				list[j] = list[j-1];
-				list[j-1] = t;
-			}
-		}
 	}
 }
 
@@ -133,14 +116,25 @@ void PancakeSort(int *list, size_t n){ /*O(n^2)*/
 		}
 		if(min == i) continue;
 		for(int j = min; j <= min+(n-1-min)/2; j++){
-			int t = list[j];
-			list[j] = list[n-1-j+min];
-			list[n-1-j+min] = t;
+			swap(list+j, list+n-1-j+min);
 		}
 		for(int j = i; j <= i+(n-1-i)/2; j++){
-			int t = list[j];
-			list[j] = list[n-1-j+i];
-			list[n-1-j+i] = t;
+			swap(list+j, list+n-1-j+i);
+		}
+	}
+}
+
+void CocktailShakerSort(int *list, size_t n){ /*O(n^2)*/
+	for(int i = 0; i < n/2; i++){
+		for(int j = i; j < n-i-2; j++){
+			if(list[j] > list[j+1]){
+				swap(list+j, list+j+1);
+			}
+		}
+		for(int j = n-i-1; j > i; j--){
+			if(list[j] < list[j-1]){
+				swap(list+j, list+j-1);
+			}
 		}
 	}
 }
@@ -149,9 +143,7 @@ void BubbleSort(int *list, size_t n){ /*O(n^2)*/
 	for(int i = 0; i < n-1; i++){
 		for(int j = 0; j < n-1; j++){
 			if(list[j] > list[j+1]){
-				int t = list[j];
-				list[j] = list[j+1];
-				list[j+1] = t;
+				swap(list+j, list+j+1);
 			}
 		}
 	}
@@ -159,9 +151,7 @@ void BubbleSort(int *list, size_t n){ /*O(n^2)*/
 
 void StoogeSort(int *list, size_t n){ /*O(n^2.71)*/
 	if(list[0] > list[n-1]){
-		int t = list[0];
-		list[0] = list[n-1];
-		list[n-1] = t;
+		swap(list, list+n-1);
 	}
 	if(n > 2){
 		StoogeSort(list, 2*n/3);
@@ -193,7 +183,13 @@ void MiracleSort(int *list, size_t n){ /*O(inf)*/
 	}
 }
 
-
+void CombSort(int *list, size_t n){
+	for(int i = n-1; i > 0; i--){
+		for(int j = 0; j+i < n; j++){
+			break;
+		}
+	}
+}
 
 
 
