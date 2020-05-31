@@ -55,6 +55,50 @@ int main(int argc, char** argv){
 			list = build_random_array(count);
 			while(check_if_sorted(list, count)) list = build_random_array(count);
 			start_t = clock();
+			BogoSort(list, count);
+			end_t = clock();
+			if(!check_if_sorted(list, count)) total_t += PUNITION;
+			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
+			free(list);
+		}
+		end_t = clock();
+		total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
+		//printf("%d, %lf, BogoSort\n", count, total_t);
+		if(total_t > MAX_TIME) break;
+		count = augment_count(total_t, count);
+	}
+	printf("%d, %lf, BogoSort\n", count, total_t);
+
+
+	count = 2;
+	total_t = 0;
+	while(total_t < MAX_TIME){
+		total_t = 0;
+		for(int i = 0; i < ATTEMPTS; i++){
+			list = build_random_array(count);
+			while(check_if_sorted(list, count)) list = build_random_array(count);
+			start_t = clock();
+			BeadSort(list, count);
+			end_t = clock();
+			if(!check_if_sorted(list, count)) total_t += PUNITION;
+			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
+			free(list);
+		}
+		//printf("%d, %lf, BeadSort\n", count, total_t);
+		if(total_t > MAX_TIME) break;
+		count = augment_count(total_t, count);
+	}
+	printf("%d, %lf, BeadSort\n", count, total_t);
+
+
+	count = 2;
+	total_t = 0;
+	while(total_t < MAX_TIME){
+		total_t = 0;
+		for(int i = 0; i < ATTEMPTS; i++){
+			list = build_random_array(count);
+			while(check_if_sorted(list, count)) list = build_random_array(count);
+			start_t = clock();
 			InsertionSort(list, count);
 			end_t = clock();
 			if(!check_if_sorted(list, count)) total_t += PUNITION;
@@ -87,27 +131,6 @@ int main(int argc, char** argv){
 		count = augment_count(total_t, count);
 	}
 	printf("%d, %lf, SelectionSort\n", count, total_t);
-
-
-	count = 2;
-	total_t = 0;
-	while(total_t < MAX_TIME){
-		total_t = 0;
-		for(int i = 0; i < ATTEMPTS; i++){
-			list = build_random_array(count);
-			while(check_if_sorted(list, count)) list = build_random_array(count);
-			start_t = clock();
-			BubbleSort(list, count);
-			end_t = clock();
-			if(!check_if_sorted(list, count)) total_t += PUNITION;
-			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
-			free(list);
-		}
-		//printf("%d, %lf, BubbleSort\n", count, total_t);
-		if(total_t > MAX_TIME) break;
-		count = augment_count(total_t, count);
-	}
-	printf("%d, %lf, BubbleSort\n", count, total_t);
 
 
 	count = 2;
@@ -160,17 +183,17 @@ int main(int argc, char** argv){
 			list = build_random_array(count);
 			while(check_if_sorted(list, count)) list = build_random_array(count);
 			start_t = clock();
-			BeadSort(list, count);
+			BubbleSort(list, count);
 			end_t = clock();
 			if(!check_if_sorted(list, count)) total_t += PUNITION;
 			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
 			free(list);
 		}
-		//printf("%d, %lf, BeadSort\n", count, total_t);
+		//printf("%d, %lf, BubbleSort\n", count, total_t);
 		if(total_t > MAX_TIME) break;
 		count = augment_count(total_t, count);
 	}
-	printf("%d, %lf, BeadSort\n", count, total_t);
+	printf("%d, %lf, BubbleSort\n", count, total_t);
 
 
 	count = 2;
@@ -192,29 +215,6 @@ int main(int argc, char** argv){
 		count = augment_count(total_t, count);
 	}
 	printf("%d, %lf, StoogeSort\n", count, total_t);
-
-
-	count = 2;
-	total_t = 0;
-	while(total_t < MAX_TIME){
-		total_t = 0;
-		for(int i = 0; i < ATTEMPTS; i++){
-			list = build_random_array(count);
-			while(check_if_sorted(list, count)) list = build_random_array(count);
-			start_t = clock();
-			BogoSort(list, count);
-			end_t = clock();
-			if(!check_if_sorted(list, count)) total_t += PUNITION;
-			else total_t += (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
-			free(list);
-		}
-		end_t = clock();
-		total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC / ATTEMPTS;
-		//printf("%d, %lf, BogoSort\n", count, total_t);
-		if(total_t > MAX_TIME) break;
-		count = augment_count(total_t, count);
-	}
-	printf("%d, %lf, BogoSort\n", count, total_t);
 
 
 	count = 2;
