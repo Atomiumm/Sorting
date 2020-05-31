@@ -1,5 +1,3 @@
-#define MAX_TIME 0.002
-
 int* build_random_array(size_t n){
 	int *list = malloc(sizeof(int) * n);
 	time_t t;
@@ -36,7 +34,7 @@ void swap(int* ptr1, int* ptr2){
 
 
 
-int StalinSort(int *list, size_t n){ /*O(n)*/
+void StalinSort(int *list, size_t n){ /*O(n)*/
 	/*Iterate trough the list and ignore each element that is smaller than the previous one*/
 	size_t m = 1;
 	for(int i = 0; i < n; i++){
@@ -45,21 +43,8 @@ int StalinSort(int *list, size_t n){ /*O(n)*/
 			m++;
 		}
 	}
-	return m;
-}
-
-void BogoSort(int *list, size_t n){ /*O(n*n!)*/
-	/*Shuffle the list until the list is sorted*/
-	clock_t start_t = clock();
-	int count = 0;
-	srand((unsigned) time(NULL));
-	while(!check_if_sorted(list, n)){
-		count++;
-		for(size_t i = 0; i < n - 1; i++){
-			size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-			swap(list+j, list+i);
-		}
-		if((double)(clock() - start_t) / CLOCKS_PER_SEC > MAX_TIME) return;
+	for(int i = m; i < n; i++){
+		list[i] = list[m-1]+1;
 	}
 }
 
@@ -83,6 +68,25 @@ void BeadSort(int *list, size_t n){ /*O(sum(list))*/
 	free(weights);
 }
 
+void QuickSort(int *list, size_t n){
+	void quick_sort(int* list,int low,int high){
+		int j,i;
+		if(low<high){
+			i = low;
+			j = high;
+			while(i<j){
+				while((list[i]<=list[low])&&(i<high)) i++;
+				while(list[j]>list[low]) j--;
+				if(i<j) swap(list+i, list+j);
+			}
+			swap(list+low, list+j);
+			quick_sort(list,low,j-1);
+			quick_sort(list,j+1,high);
+		}
+	}
+	quick_sort(list, 0, n-1);
+}
+
 void InsertionSort(int *list, size_t n){ /*O(n^2)*/
 	for(int i = 1; i < n; i++){
 		int t = list[i];
@@ -104,6 +108,38 @@ void SelectionSort(int *list, size_t n){ /*O(n^2)*/
 	swap(list, list+min);
 	if(n>0){
 		SelectionSort(list+1, n-1);
+	}
+}
+
+void OddEvenSort(int *list, size_t n){
+	int flag = 1;
+	while(flag){
+		flag = 0;
+		for(int i = 1; i < n-1; i += 2){
+			if(list[i] > list[i+1]){
+				swap(list+i, list+i+1);
+				flag = 1;
+			}
+		}
+		for(int i = 0; i < n-1; i += 2){
+			if(list[i] > list[i+1]){
+				swap(list+i, list+i+1);
+				flag = 1;
+			}
+		}
+	}
+}
+
+void GnomeSort(int *list, size_t n){
+	int pos = 0;
+	while(pos < n){
+		if(pos == 0 || list[pos] >= list[pos-1]){
+			pos++;
+		}
+		else{
+			swap(list+pos, list+pos-1);
+			pos--;
+		}
 	}
 }
 
@@ -139,6 +175,16 @@ void CocktailShakerSort(int *list, size_t n){ /*O(n^2)*/
 	}
 }
 
+void CombSort(int *list, size_t n){
+	for(int i = n-1; i > 0; i--){
+		for(int j = 0; j+i < n; j++){
+			if(list[j] > list[j+i]){
+				swap(list+j, list+j+i);
+			}
+		}
+	}
+}
+
 void BubbleSort(int *list, size_t n){ /*O(n^2)*/
 	for(int i = 0; i < n-1; i++){
 		for(int j = 0; j < n-1; j++){
@@ -160,6 +206,32 @@ void StoogeSort(int *list, size_t n){ /*O(n^2.71)*/
 	}
 }
 
+void BogoSort(int *list, size_t n){ /*O(n*n!)*/
+	/*Shuffle the list until the list is sorted*/
+	int count = 0;
+	srand((unsigned) time(NULL));
+	while(!check_if_sorted(list, n)){
+		count++;
+		for(size_t i = 0; i < n - 1; i++){
+			size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+			swap(list+j, list+i);
+		}
+		if(count > n*n) return;
+	}
+}
+
+void MiracleSort(int *list, size_t n){ /*O(inf)*/
+	/*Wait until the list is miraculously sorted by the hand of god*/
+	for(int i = 0; i < n; i++){
+		if(check_if_sorted(list, n)){
+			return;
+		}
+	}
+}
+
+
+
+
 /* NOT WORKING void SlowSort(int *list, size_t n){ //O(n^log2(n)/2)
 	if(n > 1){
 		SlowSort(list, n/2);
@@ -172,34 +244,6 @@ void StoogeSort(int *list, size_t n){ /*O(n^2.71)*/
 		SlowSort(list, n-1);
 	}
 }*/
-
-void MiracleSort(int *list, size_t n){ /*O(inf)*/
-	/*Wait until the list is miraculously sorted by the hand of god*/
-	clock_t start_t = clock();
-	while((double)(clock() - start_t) / CLOCKS_PER_SEC < MAX_TIME){
-		if(check_if_sorted(list, n)){
-			return;
-		}
-	}
-}
-
-void CombSort(int *list, size_t n){
-	for(int i = n-1; i > 0; i--){
-		for(int j = 0; j+i < n; j++){
-			break;
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-
 
 
 
